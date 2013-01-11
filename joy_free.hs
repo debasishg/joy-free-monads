@@ -16,23 +16,23 @@ type Joy = Free JoyOperator
 
 -- | Push an integer to the stack
 push :: Int -> Joy ()
-push n = wrap $ Push n $ return ()
+push n = liftF $ Push n ()
 
 -- | Add the top two numbers of the stack and push the sum
 add :: Joy ()
-add = wrap $ Add $ return ()
+add = liftF $ Add ()
 
 -- | Multiply the top two numbers of the stack and push the product
 mult :: Joy ()
-mult = wrap $ Mult $ return ()
+mult = liftF $ Mult ()
 
 -- | Duplicate the number from the top of the stack and push it to the top
 dup :: Joy ()
-dup = wrap $ Dup $ return ()
+dup = liftF $ Dup ()
 
 -- | End of program: Ignore everything after it
 end :: Joy ()
-end = wrap $ End
+end = liftF $ End
 
 -- | Pretty print my Joy program: an interpreter over Free monad
 printProgram :: Show n => Joy n -> String
@@ -91,3 +91,13 @@ p = do push 5
        cube
        end
 
+-- end >> m
+-- = liftF $ End >> m
+-- = liftF $ End >>= \_ -> m
+-- = Free (fmap Pure End) >>= \_ -> m
+-- = Free End >>= \_ -> m
+-- = Free (fmap (>>= \_ -> m) End)
+-- = Free End
+-- = Free (fmap Pure End)
+-- = liftF End
+-- = end
