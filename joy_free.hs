@@ -1,15 +1,14 @@
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances, DeriveFunctor, UndecidableInstances, TypeFamilies #-}
 module Joy where
 
-import Data.Functor ((<$>))
 import Control.Monad.Free
 
-data JoyOperator next = Push Int next
-                     | Add      next 
-                     | Mult     next 
-                     | Dup      next 
-                     | End          
-                     deriving (Show, Functor)
+data JoyOperator cont = Push Int cont
+                      | Add      cont 
+                      | Mult     cont 
+                      | Dup      cont 
+                      | End          
+                      deriving (Show, Functor)
 
 -- | The free monad over JoyOperator
 type Joy = Free JoyOperator
